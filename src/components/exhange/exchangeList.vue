@@ -6,7 +6,10 @@
                 <figure class="image is-2by1 item-figure background-img" :style="{ 'background-image': `url(${exchange.image})` }" alt="">
                 </figure>
                 <div class="item-featured">
-                  Icon
+                  <div class="awesome-icon">
+                    <font-awesome-icon icon="star"/>
+                  </div>
+                 
                 </div>
               </a>
               <div v-for="tag in exchange.tags" :key="tag" class="item-tags">
@@ -84,3 +87,14 @@ export default {
   }
 }
 </script>
+
+<style>
+  .font-awesome-icon{
+    height: 25px;
+    width: 25px;
+    background-color: #ffbc8c;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
