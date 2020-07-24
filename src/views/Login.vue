@@ -13,6 +13,7 @@
               <input class="input is-large"
                      type="email"
                      placeholder="Your Email"
+                     v-model="form.email"
                     >
             </div>
           </div>
@@ -21,13 +22,11 @@
               <input class="input is-large"
                      type="password"
                      placeholder="Your Password"
-                     autocomplete="current-password">
-              <!-- <div class="form-error">
-                <span class="help is-danger">Password is required</span>
-              </div> -->
+                     v-model="form.password">
+             
             </div>
           </div>
-          <button class="button is-block is-info is-large is-fullwidth">Sign In</button>
+          <button @click="login" class="button is-block is-info is-large is-fullwidth">Sign In</button>
         </form>
       </div>
       <p class="has-text-grey">
@@ -38,6 +37,24 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data(){
+    return{
+      form:{
+        email:'',
+        password:''
+      }
+    }
+  },
+  methods:{
+    login(){
+
+    }
+  }
+}
+</script>
 
 <style scoped>
   .hero.is-success {

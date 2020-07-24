@@ -6,7 +6,7 @@
         <figure class="avatar">
             <img src="https://placehold.it/128x128">
         </figure>
-        <form>
+        
            <div class="field">
             <div class="control">
               <input class="input is-large"
@@ -50,7 +50,7 @@
             </div>
           </div>
           <button @click="register" class="button is-block is-info is-large is-fullwidth">Sign Up</button>
-        </form>
+        
       </div>
       <p class="has-text-grey">
         <a>Sign In With Google</a>&nbsp;
@@ -69,13 +69,26 @@ export default {
       name:'',
       email:'',
       password:'',
-      passwordConfirm:'',
+      passwordConfirm:'', 
     }
    }
   },
   methods:{
     register(){
-      alert(JSON.stringify(this.form))
+     this.$store.dispatch('signUp',this.form)
+     // eslint-disable-next-line no-unused-vars
+     .then(async user=>{
+      await this.$store.dispatch('createUserProfile',
+       {uid:user.uid, 
+       userProfile:{
+         Name:this.form.name,
+         Email:this.form.email,
+         User:user.uid
+       }})
+       this.$router.push('/')
+     }).catch(errorMessage=>{
+       this.$toasted.error(errorMessage,{duration:3000})
+     })
     }
   }
 }
