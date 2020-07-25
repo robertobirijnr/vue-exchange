@@ -7,7 +7,7 @@
         <figure class="avatar">
             <img src="https://placehold.it/128x128">
         </figure>
-        <form>
+       
           <div class="field">
             <div class="control">
               <input class="input is-large"
@@ -27,12 +27,12 @@
             </div>
           </div>
           <button @click="login" class="button is-block is-info is-large is-fullwidth">Sign In</button>
-        </form>
+      
       </div>
       <p class="has-text-grey">
         <a>Sign In With Google</a>&nbsp;
-        <router-link>Sign Up</router-link> &nbsp;·&nbsp;
-        <a href="../">Need Help?</a>
+        <router-link to="/register">Sign Up</router-link> &nbsp;·&nbsp;
+        <a href="#">Need Help?</a>
       </p>
     </div>
   </div>
@@ -49,8 +49,11 @@ export default {
     }
   },
   methods:{
-    login(){
-
+    login(){ 
+      this.$store.dispatch('signIn',this.form)
+      // eslint-disable-next-line no-unused-vars
+      .then(_ => this.$router.push('/'))
+      .catch(errorMessage => this.$toated.error(errorMessage,{duration:3000}))
     }
   }
 }

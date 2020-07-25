@@ -14,9 +14,29 @@
           </div>
           <div id="navbar-menu" class="navbar-menu">
             <div class="navbar-end">
-          
+           <div v-if="isAuthenticated" class="navbar-item nav-web" >{{user.email}}</div>
               <router-link v-for="(menu, text) in menuItems" 
               :key="text" :to="menu.link" class="navbar-item nav-web">{{menu.text}}</router-link>
+              <template v-if="!isAuthenticated">
+                <router-link
+                to="/login"
+                 class="navbar-item nav-web"
+                >
+                  Login
+                </router-link>
+                <router-link
+                to="/register"
+                 class="navbar-item nav-web"
+                >
+                  Register
+                </router-link>
+              </template>
+              <template v-else>
+                <a
+                @click="$store.dispatch('logOut')"
+                 href="#" 
+                class="navbar-item nav-web">Logout</a>
+              </template>
             </div>
           </div>
         </div>
@@ -33,10 +53,17 @@ return {
       {text:'Home','link':'/'},
       {text:'About','link':'/about'},
       {text:'FAQ','link':'/faq'},
-      {text:'Login','link':'/login'},
-      {text:'Register','link':'/register'}
+     
     ]
   };
+},
+computed:{
+  user(){
+    return this.$store.state.auth
+  },
+  isAuthenticated(){
+    return this.$store.getters['auth/isAuthenticated']
+  }
 }
 }
 </script>

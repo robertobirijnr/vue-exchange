@@ -66,7 +66,7 @@ export default {
   data(){
    return{
       form:{
-      name:'',
+      name:'', 
       email:'',
       password:'',
       passwordConfirm:'', 
