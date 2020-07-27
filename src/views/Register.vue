@@ -62,36 +62,40 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+
 export default {
-  data(){
-   return{
-      form:{
-      name:'', 
-      email:'',
-      password:'',
-      passwordConfirm:'', 
-    }
-   }
+  data() {
+    return {
+      form: {
+        name: "",
+        email: "",
+        password: ""
+      },
+      error: null
+    };
   },
-  methods:{
-    register(){
-     this.$store.dispatch('signUp',this.form)
-     // eslint-disable-next-line no-unused-vars
-     .then(async user=>{
-      await this.$store.dispatch('createUserProfile',
-       {uid:user.uid, 
-       userProfile:{
-         Name:this.form.name,
-         Email:this.form.email,
-         User:user.uid
-       }})
-       this.$router.push('/')
-     }).catch(errorMessage=>{
-       this.$toasted.error(errorMessage,{duration:3000})
-     })
+  methods: {
+    register() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.form.email, this.form.password)
+        .then(data => {
+          data.user
+            .updateProfile({
+              displayName: this.form.name
+            })
+            // eslint-disable-next-line no-unused-vars
+            .then(data => {
+               this.$router.replace({ name: "Home" });
+            });
+        })
+        .catch(err => {
+          this.error = err.message;
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>

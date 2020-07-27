@@ -16,21 +16,16 @@ Vue.config.productionTip = false
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Toasted)
 
-let app;
+import '../src/db'
 
+firebase.auth().onAuthStateChanged(user => {
+  store.dispatch("fetchUser", user);
+});
 
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){
-    store.commit('setAuthUser',user)
-  }
-
-  if(!app){ 
-  app =  new Vue({
+ new Vue({
       router,
       store,
       render: h => h(App)
     }).$mount('#app')
-  }
-})
-
+ 
 

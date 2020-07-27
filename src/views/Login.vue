@@ -39,26 +39,34 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+
 export default {
-  data(){
-    return{
-      form:{
-        email:'',
-        password:''
-      }
-    }
+  data() {
+    return {
+      form: {
+        email: "",
+        password: ""
+      },
+      error: null
+    };
   },
-  methods:{
-    login(){ 
-      this.$store.dispatch('signIn',this.form)
-      // eslint-disable-next-line no-unused-vars
-      .then(_ => this.$router.push('/'))
-      .catch(errorMessage => this.$toated.error(errorMessage,{duration:3000}))
+  methods: {
+    login() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.form.email, this.form.password)
+        // eslint-disable-next-line no-unused-vars
+        .then(data => {
+          this.$router.replace({ name: "Home" });
+        })
+        .catch(err => {
+          this.error = err.message;
+        });
     }
   }
-}
+};
 </script>
-
 <style scoped>
   .hero.is-success {
     background: #F2F6FA;

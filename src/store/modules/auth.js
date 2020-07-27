@@ -1,49 +1,37 @@
-import firebase from 'firebase/app'
 import 'firebase/auth'
-import { db } from '../../db'
 
-export default{
-    namespace:true,
-    state:{
-        user:null
+
+export default {
+    state: {
+      user: {
+        loggedIn: false,
+        data: null
+      }
     },
-    getters:{
-        isAuthenticated(state){
-          return  !!state.user
-        }
+    getters: {
+      user(state){
+        return state.user
+      }
     },
-    actions:{
-        signUp(context,{email,password}){
-            return firebase.auth().createUserWithEmailAndPassword(email,password)
-            .then(({user})=>{
-                return user
-            }).catch(err=>{
-                const message = err.message
-                return Promise.reject(message)
-            })
-        },
-        createUserProfile(_,{uid,userProfile}){
-            return db
-            .collection('profile')
-            .doc(uid)
-            .set(userProfile)
-        },
-        signIn(context,{email,password}){
-            return firebase.auth().signInWithEmailAndPassword(email,password)
-            .then(user=>{
-                return user
-            }).catch(err =>{
-                const message = err.message
-                return Promise.reject(message)
-            })
-        },
-        logOut(){
-            return firebase.auth().signOut()
-        }
+    mutations: {
+      SET_LOGGED_IN(state, value) {
+        state.user.loggedIn = value;
+      },
+      SET_USER(state, data) {
+        state.user.data = data;
+      }
     },
-    mutations:{
-        setAuthUser(state,user){
-            state.user = user
+    actions: {
+      fetchUser({ commit }, user) {
+        commit("SET_LOGGED_IN", user !== null);
+        if (user) {
+          commit("SET_USER", {
+            displayName: user.displayName,
+            email: user.email
+          });
+        } else {
+          commit("SET_USER", null);
         }
+      }
     }
-}
+  }

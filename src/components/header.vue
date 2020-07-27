@@ -14,10 +14,16 @@
           </div>
           <div id="navbar-menu" class="navbar-menu">
             <div class="navbar-end">
-           <div v-if="isAuthenticated" class="navbar-item nav-web" >{{user.email}}</div>
+           <div v-if="user.loggedIn" class="navbar-item nav-web" >{{user.data.displayName}}</div>
               <router-link v-for="(menu, text) in menuItems" 
               :key="text" :to="menu.link" class="navbar-item nav-web">{{menu.text}}</router-link>
-              <template v-if="!isAuthenticated">
+              <template v-if="user.loggedIn">
+                 <a
+                 @click.prevent="signOut"
+                 href="#" 
+                class="navbar-item nav-web">Logout</a>
+              </template>
+              <template v-else>
                 <router-link
                 to="/login"
                  class="navbar-item nav-web"
@@ -30,12 +36,7 @@
                 >
                   Register
                 </router-link>
-              </template>
-              <template v-else>
-                <a
-                @click="$store.dispatch('logOut')"
-                 href="#" 
-                class="navbar-item nav-web">Logout</a>
+               
               </template>
             </div>
           </div>
@@ -45,6 +46,9 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import firebase from "firebase";
+
 export default {
   data:function() {
 return {
@@ -57,13 +61,24 @@ return {
     ]
   };
 },
-computed:{
-  user(){
-    return this.$store.state.auth
+ computed: {
+    ...mapGetters({
+// map `this.user` to `this.$store.getters.user`
+      user: "user"
+    })
   },
-  isAuthenticated(){
-    return this.$store.getters['auth/isAuthenticated']
+   methods: {
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace({
+            name: "Home"
+          });
+        });
+    }
   }
 }
-}
+
 </script>
