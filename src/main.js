@@ -18,8 +18,8 @@ Vue.use(Toasted)
 
 import '../src/db'
 
-firebase.auth().onAuthStateChanged(user => {
-  store.dispatch("fetchUser", user);
+firebase.auth().onAuthStateChanged(async user => {
+ await store.dispatch("fetchUser", user);
 });
 
  new Vue({
